@@ -37,7 +37,7 @@ let Query = function(){
         // Bands in Town query
         case "concert-this":
             axios
-                .get("https://rest.bandsintown.com/artists/" + searchQuery + "/events?app_id=codingbootcamp")
+                .get("https://rest.bandsintown.com/artists/" + searchQuery + "/events?app_id="+keys.omdb.key)
                 .then(function(response) {
                     console.log("Concert Venue: "+response.data[0].venue.name);
                     console.log("Venue Location: "+response.data[0].venue.city);
@@ -47,6 +47,16 @@ let Query = function(){
             break;
         // Spotify query
         case "spotify-this-song":
+            if (searchQuery == "") {
+                spotify
+                    .search({ type: 'track', query: "The Sign" })
+                    .then(function(response){
+                        console.log("Artist: "+response.tracks.items[8].artists[0].name);
+                        console.log("Track: "+response.tracks.items[8].name);
+                        console.log("Preview URL: "+response.tracks.items[8].preview_url);
+                        console.log("Album: "+response.tracks.items[8].album.name);
+                    })
+            } else {
             spotify
                 .search({ type: 'track', query: searchQuery })
                 .then(function(response){
@@ -55,11 +65,26 @@ let Query = function(){
                     console.log("Preview URL: "+response.tracks.items[0].preview_url);
                     console.log("Album: "+response.tracks.items[0].album.name);
                 });
+            };
             break;
         // OMDB query
         case "movie-this":
+            if (searchQuery == "") {
+                axios
+                    .get("http://www.omdbapi.com/?t=mr nobody&y=&plot=short&apikey="+keys.omdb.key)
+                    .then(function(response){
+                        console.log("Title: "+response.data.Title);
+                        console.log("Release Year: "+response.data.Year);
+                        console.log("IMDB Rating: "+response.data.imdbRating);
+                        console.log("Rotten Tomatoes Rating: "+response.data.Ratings[1].Value);
+                        console.log("Country of Production: "+response.data.Country);
+                        console.log("Language: "+response.data.Language);
+                        console.log("Plot Summary: "+response.data.Plot);
+                        console.log("Starring: "+response.data.Actors);
+                    })
+            } else {
             axios
-                .get("http://www.omdbapi.com/?t="+searchQuery+"&y=&plot=short&apikey=trilogy")
+                .get("http://www.omdbapi.com/?t="+searchQuery+"&y=&plot=short&apikey="+keys.omdb.key)
                 .then(function(response){
                     console.log("Title: "+response.data.Title);
                     console.log("Release Year: "+response.data.Year);
@@ -70,6 +95,7 @@ let Query = function(){
                     console.log("Plot Summary: "+response.data.Plot);
                     console.log("Starring: "+response.data.Actors);
                 });
+            }
             break;
         // Default case to handle unspecified arguments
         default:
