@@ -37,7 +37,7 @@ let Query = function(){
         // Bands in Town query
         case "concert-this":
             axios
-                .get("https://rest.bandsintown.com/artists/" + searchQuery + "/events?app_id="+keys.omdb.key)
+                .get("https://rest.bandsintown.com/artists/" + searchQuery + "/events?app_id="+keys.bit.key)
                 .then(function(response) {
                     console.log("Concert Venue: "+response.data[0].venue.name);
                     console.log("Venue Location: "+response.data[0].venue.city);
